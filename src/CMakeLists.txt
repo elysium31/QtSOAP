@@ -8,6 +8,23 @@ SET(KIT_SRCS
 SET(KIT_MOC_SRCS
   qtsoap.h
   )
+
+SET(KIT_HEADERS
+  qtsoap.h
+  QtSoapTypeFactory
+  QtSoapTypeConstructorBase
+  QtSoapTypeConstructor
+  QtSoapType
+  QtSoapStructIterator
+  QtSoapStruct
+  QtSoapSimpleType
+  QtSoapQName
+  QtSoapNamespaces
+  QtSoapMessage
+  QtSoapHttpTransport
+  QtSoapArrayIterator
+  QtSoapArray
+  )
   
 INCLUDE_DIRECTORIES(
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -37,6 +54,13 @@ TARGET_LINK_LIBRARIES(
   ${${PROJECT_NAME}_LINK_LIBRARIES}
   )
 
+TARGET_INCLUDE_DIRECTORIES(
+  ${libname}
+  PUBLIC
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+)
+
 #-----------------------------------------------------------------------------
 #
 # To fix compilation problem: relocation R_X86_64_32 against `a local symbol' can not be
@@ -45,3 +69,13 @@ TARGET_LINK_LIBRARIES(
 IF( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" )
   SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-fPIC")
 ENDIF( CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64" )
+
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT ${targets_export_name}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install( FILES ${KIT_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME} )
